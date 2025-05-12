@@ -1,0 +1,148 @@
+class Node { //Class untuk node
+  int nodeValue; //Data yang disimpan dalam node
+  Node? next; //Node setelahnya didalam list
+  Node(this.nodeValue) : next = null; //Konstruktor untuk node
+}
+
+class SingleLinkedList {
+  Node? head = null;
+  bool isEmpty() {
+    return head == null;
+  }
+
+  void InsertFront(int data) { //Menambahkan node di depan linked list
+    Node newNode = Node(data);
+    if (isEmpty()) {
+      head = newNode;
+    } else {
+      newNode.next = head;
+      head = newNode;
+    }
+  }
+
+  void InsertBack(int data) { //Menambahkan node di belakang linked list
+    Node newNode = Node(data);
+    if (isEmpty()) {
+      head = newNode;
+    } else {
+      Node? temp = head;
+      while (temp!.next != null) {
+        temp = temp.next;
+      }
+      temp.next = newNode;
+    }
+  }
+
+  void InsertAfter(Node prevNode, int newData) { //Menambahkan node setelah node tertentu
+    if (prevNode == isEmpty()) {
+      print("The given previous node cannot be null");
+    }
+    Node newNode = Node(newData);
+    newNode.next = prevNode.next;
+    prevNode.next = newNode;
+  }
+
+  void deleteFront() { //Menghapus node paling depan
+    if (!isEmpty()) {
+      if (head!.next != null) {
+        head = head!.next;
+      } else {
+        head = null;
+      }
+    }
+  }
+
+  void deleteEnd() { //Menghapus node paling belakang
+    if (!isEmpty()) {
+      if (head!.next != null) {
+        Node? bantu = head;
+        while (bantu!.next!.next != null) {
+          bantu = bantu.next;
+        }
+        bantu.next = null;
+      } else {
+        head = null;
+      }
+    }
+  }
+
+  void deleteMiddle(int cari) { //Menghapus node di tengah
+    if (!isEmpty()) {
+      if (head!.next != null) {
+        Node? bantu = head;
+        while (bantu!.next!.nodeValue != cari) {
+          bantu = bantu.next;
+        }
+        Node? hapus = bantu.next;
+        bantu.next = hapus!.next;
+        hapus.next = null;
+      } else {
+        head = null;
+      }
+    }
+  }
+
+  void deleteByPosisi(int posisi) { //Menghapus node berdasarkan posisi
+    if (isEmpty()) {
+      print("Linked List kosong");
+      return;
+    }
+
+    int index = posisi - 1; // Mengubah posisi ke indeks 0
+
+    if (index == 0) { //Jika indeks 0
+      head = head!.next; // Hapus node pertama
+      return;
+    }
+
+    Node? temp = head; //Node sementara untuk traversing
+    int count = 0; //Menghitung posisi node
+
+    while (temp != null && count < index - 1) { //Traversing hingga posisi yang diinginkan
+      temp = temp.next; // Pindah ke node berikutnya
+      count++; //Increment
+    }
+
+    if (temp == null || temp.next == null) { //Jika posisi di luar batas
+      print("Urutan di luar batas");
+      return;
+    }
+
+    temp.next = temp.next!.next; // Menghapus node pada posisi yang diinginkan
+  }
+
+  void PrintList() { //Menampilkan isi linked list
+    if (!isEmpty()) {
+      Node? now = head;
+      while (now != null) {
+        print('${now.nodeValue} ');
+        now = now.next;
+      }
+    } else {
+      print('Linked List dalam kondisi kosong');
+    }
+  }
+}
+
+void main() {
+  SingleLinkedList ll = SingleLinkedList();
+
+  print("Data:");
+  ll.InsertFront(10);
+  ll.InsertFront(35);
+
+  print("Operasi Insertion Front of Linked List:");
+  ll.PrintList();
+
+  ll.InsertBack(15);
+  print("Operasi Insertion Back of Linked List:");
+
+  print("Insert After Data: ");
+  ll.InsertAfter(ll.head!.next!.next!, 20);
+  ll.PrintList();
+
+  print("Delete by Posisi:");
+  ll.deleteByPosisi(2);
+
+  ll.PrintList();
+}
